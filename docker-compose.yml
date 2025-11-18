@@ -1,0 +1,17 @@
+services:
+  terraform-sidecar:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: terraform-sidecar:latest
+    container_name: terraform-sidecar
+    ports:
+      - "8000:8000"
+    environment:
+      SIDECAR_TERRAFORM_ROOT: /tfpjts
+      SIDECAR_LOCK_DIR: /tmp/tf_locks
+      SIDECAR_STARTUP_INIT_ENABLED: "true"
+    volumes:
+      - ./tfpjts:/tfpjts
+    restart: unless-stopped
+
