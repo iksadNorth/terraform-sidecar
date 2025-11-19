@@ -39,11 +39,11 @@ docker compose up --build
 2. `POST /tfpjts/{project_id}/git` : Git 저장소 클론 → 자동 init
 3. 필요 시 `POST /tfpjts/{project_id}`로 apply, `DELETE`로 destroy
 
-현재 우선적으로 `GET /tfpjts`와 `POST /tfpjts/{project_id}/git`만 수동 테스트 중이며, 향후 자동화 테스트와 나머지 엔드포인트 검증이 필요하다.
+~~현재 우선적으로 `GET /tfpjts`와 `POST /tfpjts/{project_id}/git`만 수동 테스트 중이며, 향후 자동화 테스트와 나머지 엔드포인트 검증이 필요하다.~~
 
 ### TODO & 향후 작업
-- [ ] apply/destroy 엔드포인트 통합 테스트
+- [v] apply/destroy 엔드포인트 통합 테스트
 - [ ] Airflow DAG에서 호출하는 예시 스크립트 작성
-- [ ] 인증/권한(예: API Key) 추가 고려
+- [ ] ~~인증/권한(예: API Key) 추가 고려~~ => 내부망에서만 사용
 - [ ] 로그/모니터링 연동
 

@@ -74,7 +74,7 @@ class TerraformManager:
     def run_apply(self, project_id: str, variables: dict[str, str]) -> str:
         project_path = self._project_path(project_id)
         self._terraform_init(project_path)
-        args = ["apply", "-auto-approve", *self._build_var_args(variables)]
+        args = ["apply", "-auto-approve", "-no-color", *self._build_var_args(variables)]
         return self._run_cmd(args, project_path)
 
     def run_destroy(self, project_id: str, variables: dict[str, str]) -> str:
