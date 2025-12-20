@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terraform-sidecar
+  namespace: trendgetter
+  labels:
+    app: terraform-sidecar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terraform-sidecar
+  template:
+    metadata:
+      labels:
+        app: terraform-sidecar
+    spec:
+      containers:
+      - name: terraform-sidecar
+        image: terraform-sidecar:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: SIDECAR_TERRAFORM_ROOT
+          value: "/tfpjts"
+        - name: SIDECAR_LOCK_DIR
+          value: "/tmp/tf_locks"
+        - name: SIDECAR_STARTUP_INIT_ENABLED
+          value: "true"
+        command: ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+        volumeMounts:
+        - name: tfpjts
+          mountPath: /tfpjts
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /tfpjts
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /tfpjts
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: tfpjts
+        persistentVolumeClaim:
+          claimName: terraform-sidecar-tfpjts
+      restartPolicy: Always
+

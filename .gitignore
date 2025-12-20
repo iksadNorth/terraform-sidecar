@@ -11,3 +11,4 @@ wheels/
 
 # Custom for Project
 tfpjts/
+.env
